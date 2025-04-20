@@ -3,3 +3,5 @@ uvicorn
 sqlmodel
 python-dotenv
 psycopg2-binary
+python-jose
+passlib
