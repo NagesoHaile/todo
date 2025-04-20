@@ -33,4 +33,6 @@ def update_task(task_id:int,task:TaskUpdate,db:Session = Depends(get_session)):
     return TaskService.update_task(db=db,updates=task,task_id=task_id)
 
 
-    
+@router.delete('/{task_id}')
+def delete_task(task_id:int,db:Session = Depends(get_session)):
+    return TaskService.delete_task(db=db,task_id=task_id)
