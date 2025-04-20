@@ -2,7 +2,7 @@ from sqlmodel import Session,select
 from app.models.task import Task
 from typing import List,Optional
 from fastapi import HTTPException
-from app.schemas.task import TaskRead
+from app.schemas.task import TaskRead,TaskUpdate
 from app.schemas.response import SuccessResponse
 
 def create_task(db:Session,task:Task)-> Task:
@@ -36,15 +36,24 @@ def get_all_tasks(db:Session):
     return db.exec(select(Task)).all()
 
 
-def update_task(db:Session,task:Task)->Task:
+def update_task(db:Session,task_id:int,updates:TaskUpdate)->Task:
     """
 It takes [session] and task of Type Task
 and returns Task
 """
-    db.add(task)  # in this one SQLModel can track changes
-    db.commit()
-    db.refresh(task)
-    return task
+    try:
+        task = db.exec(select(Task).where(Task.id == task_id)).first()
+        if not task:
+            raise HTTPException(status_code=404,detail="Task not found.")
+        update_data = updates.model_dump(exclude_unset=True)
+        for key,value in update_data.items():
+            setattr(task,key,value)
+        db.add(task)
+        db.commit()
+        db.refresh(task)
+        return task
+    except Exception as e:
+        raise HTTPException(status_code=500,detail="Internal Server Error")
 
 
 def delete_task(db:Session,task_id:int)->bool:

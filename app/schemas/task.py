@@ -29,6 +29,14 @@ class TaskRead(TaskBase):
     class Config:
         orm_mode = True
 
+class TaskUpdate(BaseModel):
+    """
+     Schema used for update a task
+    """
+    title: Optional[str] = None
+    description: Optional[str] = None
+    is_completed: Optional[bool] = None
+    user_id:Optional[int] = None 
 
 class TaskListResponse(BaseModel):
     ok:bool = True
