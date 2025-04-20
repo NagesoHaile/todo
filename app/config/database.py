@@ -21,7 +21,7 @@ def get_session():
         yield session
 
 def init_db():
-    import app.models.user
-    import app.models.task
+    # print('Creating database...')
     SQLModel.metadata.create_all(engine)
+    # print('Created database.')
  
