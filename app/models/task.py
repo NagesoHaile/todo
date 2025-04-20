@@ -1,6 +1,6 @@
 from typing import Optional,List
 from sqlmodel import SQLModel,Field,Relationship
-from .user import User
+
 
 class Task(SQLModel,table=True):
     __tablename__ = 'tasks'
