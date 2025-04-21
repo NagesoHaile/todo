@@ -1,6 +1,6 @@
-from fastapi import APIRouter,Depends,status,Request
+from fastapi import APIRouter,Depends,status,Request,Query
 from sqlmodel import Session,select
-from typing import List
+from typing import List,Optional,Union
 from app.models.task import Task
 from app.schemas.task import TaskCreate,TaskListResponse,TaskUpdate
 from app.config.database import get_session
@@ -10,8 +10,8 @@ import app.services.task_services as TaskService
 router = APIRouter(prefix='/tasks',tags=['Tasks'],dependencies=[Depends(JWTBearer())])
 
 @router.get('',response_model=TaskListResponse)
-def get_tasks(db:Session = Depends(get_session)):
-     tasks =  TaskService.get_all_tasks(db=db)
+def get_tasks(is_completed:Optional[bool] = Query(default=None),db:Session = Depends(get_session)):
+     tasks =  TaskService.get_all_tasks(db=db,is_completed=is_completed)
      return {"ok":True,"data":tasks}
     
 

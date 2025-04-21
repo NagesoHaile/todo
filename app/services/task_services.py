@@ -32,8 +32,11 @@ def get_task_by_id(db:Session,task_id:int)-> SuccessResponse:
 
 
 
-def get_all_tasks(db:Session):
-    return db.exec(select(Task)).all()
+def get_all_tasks(db:Session,is_completed:bool = None):
+    command = select(Task)
+    if is_completed is not None:
+        return db.exec(command.where(Task.is_completed == is_completed)).all()
+    return db.exec(command).all()
 
 
 def update_task(db:Session,task_id:int,updates:TaskUpdate)->Task:
