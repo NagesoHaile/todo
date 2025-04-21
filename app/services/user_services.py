@@ -1,4 +1,4 @@
-from app.schemas.user import UserRead
+from app.schemas.user import UserRead,UserUpdate
 from app.models.user import User
 from sqlmodel import Session,select
 
@@ -16,4 +16,23 @@ def get_profile(db:Session,user_id:int)->UserRead:
         return u
     except Exception as e:
         raise HTTPException(status_code=500,detail="Internal Server Error.")
-    
+
+def update_profile(db:Session,user_id:int,updates:UserUpdate):
+    """
+        update current user profile
+    """
+    try:
+        print(f"dataaaaaaaa => {updates}")
+        command = select(User).where(User.id == user_id)
+        user = db.exec(command).first()
+        if not user or None:
+            raise HTTPException(status_code=404,detail="User not found")
+        update_data = updates.model_dump(exclude_unset=True)
+        for key,value in update_data.items():
+            setattr(user,key,value)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+    except Exception as e:
+        raise HTTPException(status_code=500,detail="Internal Server Error.")

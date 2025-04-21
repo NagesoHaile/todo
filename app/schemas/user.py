@@ -16,7 +16,8 @@ class UserLogin(BaseModel):
 class ResetPassword(BaseModel):
     email:str
     password:str
-
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
 
 # ---- Response Models ----
 
@@ -24,10 +25,6 @@ class UserRead(BaseModel):
     id:int
     name:str
     email:EmailStr
-
-
-    class Config:
-        orm_mode = True
 
 
 class Token(BaseModel):
