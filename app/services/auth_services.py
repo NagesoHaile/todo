@@ -1,10 +1,9 @@
 from app.models.user import User
 from app.utils.password import hash_password,verify_password
-from app.utils.auth import create_access_token,decode_token
+from app.utils.auth import create_access_token
 
-from app.config.database import get_session
 from sqlmodel import Session,select
-from fastapi import HTTPException,Depends
+from fastapi import HTTPException
 from app.schemas.response import SuccessResponse,ErrorResponse
 from app.schemas.user import UserCreate,UserRead,UserLogin
 
